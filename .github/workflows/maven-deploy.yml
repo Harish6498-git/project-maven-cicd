@@ -19,11 +19,12 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Build with Maven
-      run: mvn clean package --file pom.xml
+    - name: Build with Maven (inside webapp)
+      working-directory: ./webapp
+      run: mvn clean package
 
     - name: List WAR files (debug)
-      run: find ./target -name "*.war"
+      run: find ./webapp/target -name "*.war"
 
     - name: Undeploy existing WAR from Tomcat
       env:
@@ -39,9 +40,10 @@ jobs:
         TOMCAT_USER: ${{ secrets.TOMCAT_USER }}
         TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
       run: |
-        WAR_FILE=$(find ./target -name "*.war" | head -n 1)
+        WAR_FILE=$(find ./webapp/target -name "*.war" | head -n 1)
         echo "Deploying $WAR_FILE to Tomcat..."
         curl -u $TOMCAT_USER:$TOMCAT_PASSWORD \
              -T "$WAR_FILE" \
              "http://3.144.220.89:8080/manager/text/deploy?path=/project&update=true"
+
 
