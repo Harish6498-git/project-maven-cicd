@@ -31,4 +31,4 @@ jobs:
         echo "Deploying $WAR_FILE to Tomcat..."
         curl -u $TOMCAT_USER:$TOMCAT_PASSWORD \
              -T "$WAR_FILE" \
-             "http://3.136.108.116:8081/manager/text/deploy?path=/project&update=true"
+             "http://3.144.220.89:8080/manager/text/deploy?path=/project&update=true"
