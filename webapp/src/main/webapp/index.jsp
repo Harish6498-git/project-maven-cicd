@@ -94,8 +94,8 @@
 <body>
 
   <form action="action_page.php" class="card">
-    <h1>Welcme to DevOps World!</h1>
-    <p style="text-align: center;">Naresh-IT, Hyderabad</p>
+    <h1>Welcome to DevOps World!</h1>
+    <p style="text-align: center;">USA</p>
     <hr>
 
     <label for="Name">Full Name</label>
