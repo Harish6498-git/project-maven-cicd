@@ -22,13 +22,26 @@ jobs:
     - name: Build with Maven
       run: mvn clean package --file pom.xml
 
+    - name: List WAR files (debug)
+      run: find ./target -name "*.war"
+
+    - name: Undeploy existing WAR from Tomcat
+      env:
+        TOMCAT_USER: ${{ secrets.TOMCAT_USER }}
+        TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
+      run: |
+        echo "Undeploying previous version..."
+        curl -u $TOMCAT_USER:$TOMCAT_PASSWORD \
+          "http://3.144.220.89:8080/manager/text/undeploy?path=/project"
+
     - name: Deploy WAR to Tomcat 9
       env:
         TOMCAT_USER: ${{ secrets.TOMCAT_USER }}
         TOMCAT_PASSWORD: ${{ secrets.TOMCAT_PASSWORD }}
       run: |
-        WAR_FILE=$(find . -name "*.war" | head -n 1)
+        WAR_FILE=$(find ./target -name "*.war" | head -n 1)
         echo "Deploying $WAR_FILE to Tomcat..."
         curl -u $TOMCAT_USER:$TOMCAT_PASSWORD \
              -T "$WAR_FILE" \
              "http://3.144.220.89:8080/manager/text/deploy?path=/project&update=true"
+
